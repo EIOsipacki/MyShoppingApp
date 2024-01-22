@@ -10,7 +10,7 @@
 
         }
 
-        public event ShoppingAddedDelegate ShoppingAddedEvent;
+        public override event ShoppingAddedDelegate ShoppingAddedEvent;
 
         public override void AddShopping(float sum)
         {

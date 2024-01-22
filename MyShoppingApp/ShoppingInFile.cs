@@ -2,7 +2,7 @@
 {
     internal class ShoppingInFile : ShoppingBase
     {
-        string fileName = "shop.txt";
+        string fileName = "2023.txt";
         
         
         public ShoppingInFile(int year)
@@ -10,7 +10,7 @@
         {
         }
 
-        public event ShoppingAddedDelegate ShoppingAddedEvent;
+        public override event ShoppingAddedDelegate ShoppingAddedEvent;
 
         public override void AddShopping(float sum)
         {
@@ -39,6 +39,7 @@
                         {
                             float rezult = float.Parse(elements[2].Trim());
                             statistics.AddShopping(rezult);
+                            AddShopping(rezult); 
                         }
                         else
                         {
@@ -140,7 +141,7 @@
             }
             else
             {
-                Console.WriteLine("The File is empty, please input Shopping by Menu ->'0''0'");
+                Console.WriteLine("The shopping file does not exist, please input Shopping by Menu ->'0'");
                 Console.ReadLine();
             }
         }

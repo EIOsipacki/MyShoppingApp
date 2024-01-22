@@ -1,5 +1,5 @@
 ﻿using MyShoppingApp;
-     
+
 
 Console.WriteLine("Hello");
 
@@ -15,7 +15,7 @@ Console.WriteLine("Hello");
 //  przez Eventy przy dodaniu paragonow; przez zaps w plik punkta   Menu , Uruchomieniu, Zamknięciu programu 
 
 int choice;
-const string ShoppingFileName = "shop.txt";
+const string ShoppingFileName = "2023.txt";
 const string ShoppingLogFile = "log.txt";
 
 ShoppingInMemory shoppingMemory = new ShoppingInMemory(2023);
@@ -24,7 +24,7 @@ ShoppingInFile shoppingFile = new ShoppingInFile(2024);
 shoppingMemory.ShoppingAddedEvent += ShoppingSumMemoryAdded;
 shoppingMemory.ShoppingAddedEvent += ShoppingAddedToFile;
 
-shoppingFile.ShoppingAddedEvent += ShoppingReadFromFile; 
+shoppingFile.ShoppingAddedEvent += ShoppingReadFromFile;
 
 
 void ShoppingSumMemoryAdded(object sender, EventArgs args)
@@ -102,6 +102,7 @@ void ProgramMenu3()
 
 //ZACZYNA SIE WYKONANIE
 ProgramBegin();
+
 do
 {
     Console.Clear();
@@ -191,7 +192,14 @@ static Shopping InputShopping()
 
         if (DateTime.TryParseExact(stringData, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out date))
         {
-            break;
+            if (int.Parse(date.Year.ToString()) == 2023)
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Year. Try again.");
+            }
         }
         else
         {

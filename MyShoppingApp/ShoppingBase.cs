@@ -6,7 +6,7 @@
 
         public delegate void ShoppingAddedDelegate(object sender, EventArgs args);
 
-        public event ShoppingAddedDelegate ShoppingAddedEvent;
+        public abstract event ShoppingAddedDelegate ShoppingAddedEvent;
 
         public ShoppingBase(int year)
         {
