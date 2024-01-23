@@ -4,15 +4,15 @@
 Console.WriteLine("Hello");
 
 
-//program wyliczani statystyk zakupow w Podanym roku (tu = 2023)
+//program wyliczania statystyk zakupow w Podanym roku (tu tylko jeden rok = 2023)
 // Po uruchomienu programu mamy Menu z możliwosciu wyboru:
 //0 - wprowadzenia nowych zakupów (zachowują sie w list w pamięci i automatycznie
-//    zapisują sie do pliku 'shop.txt'
+//    zapisują sie do pliku '2023.txt'
 //1 - wyliczanie i pokazanie Statystyk z pamieci; plus pokazanie listy Min i Max zakupów
-//2 - wyliczanie statystyk z zapisanego pliku 'shop.txt', plus pokazanie listy Min i Max zakupow z pliku
+//2 - wyliczanie statystyk z zapisanego pliku '2023.txt', plus pokazanie listy Min i Max zakupow z pliku
 //3 - Wyjscie z programu
-//  Do pliku log.txt zapisuje sie informacjia o wydarzeniach po uruchomieniu Programu 
-//  przez Eventy przy dodaniu paragonow; przez zaps w plik punkta   Menu , Uruchomieniu, Zamknięciu programu 
+//  Do pliku 'log.txt' zapisuje sie informacjia o wydarzeniach po uruchomieniu Programu 
+//  przez Eventy przy dodaniu paragonow; przez zapisanie w plik resultata wyboru Menu, Uruchomienia, Zamknięcia programu 
 
 int choice;
 const string ShoppingFileName = "2023.txt";
