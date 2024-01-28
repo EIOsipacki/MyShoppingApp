@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingApp
 {
-    internal class Shopping
+    public class Shopping
     {
         public Shopping(string shop, DateTime date, float sum)
         {

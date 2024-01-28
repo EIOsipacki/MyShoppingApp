@@ -6,8 +6,15 @@ namespace MyShoppingApp
     {
 
         int Year { get; set; }
-        void AddShopping(float sum);
+        void AddShopping(Shopping item);
+
+        void AddShopping(string shop, string dateString, float sum);
+
+        void AddShopping(string shop, string dateString, string sumString);
+
         Statistics GetStatistics();
+
+        void ShowShopping();
 
         void ShowResultStatistics(float min, float max);
 

@@ -1,13 +1,10 @@
 ﻿using MyShoppingApp;
+using System;
 
-
-Console.WriteLine("Hello");
-
-
-//program wyliczania statystyk zakupow w Podanym roku (tu tylko jeden rok = 2023)
+//program wyliczania statystyk zakupow w Podanym Roku (tu tylko jeden rok = 2023)
 // Po uruchomienu programu mamy Menu z możliwosciu wyboru:
 //0 - wprowadzenia nowych zakupów (zachowują sie w list w pamięci i automatycznie
-//    zapisują sie do pliku '2023.txt'
+//    zapisują sie do pliku 'ROK.txt'
 //1 - wyliczanie i pokazanie Statystyk z pamieci; plus pokazanie listy Min i Max zakupów
 //2 - wyliczanie statystyk z zapisanego pliku '2023.txt', plus pokazanie listy Min i Max zakupow z pliku
 //3 - Wyjscie z programu
@@ -15,17 +12,14 @@ Console.WriteLine("Hello");
 //  przez Eventy przy dodaniu paragonow; przez zapisanie w plik resultata wyboru Menu, Uruchomienia, Zamknięcia programu 
 
 int choice;
-const string ShoppingFileName = "2023.txt";
 const string ShoppingLogFile = "log.txt";
 
 ShoppingInMemory shoppingMemory = new ShoppingInMemory(2023);
-ShoppingInFile shoppingFile = new ShoppingInFile(2024);
+ShoppingInFile shoppingFile = new ShoppingInFile(2023);
 
 shoppingMemory.ShoppingAddedEvent += ShoppingSumMemoryAdded;
-shoppingMemory.ShoppingAddedEvent += ShoppingAddedToFile;
 
-shoppingFile.ShoppingAddedEvent += ShoppingReadFromFile;
-
+shoppingFile.ShoppingAddedEvent += ShoppingAddedToFile;
 
 void ShoppingSumMemoryAdded(object sender, EventArgs args)
 {
@@ -51,20 +45,20 @@ void ShoppingAddedToFile(object sender, EventArgs args)
     }
 }
 
-void ShoppingReadFromFile(object sender, EventArgs args)
+void DoneStatisticsMemory()
 {
     using (var writer = File.AppendText(ShoppingLogFile))
     {
-        writer.WriteLine($"{DateTime.Now} : the new shopping readed from file ");
+        writer.WriteLine($"{DateTime.Now} :the Statistics from Memory was solved ");
     }
 }
 
-void ProgramMenu0()
+void DoneStatisticsFile()
 //+ info do pliku log.xtx
 {
     using (var writer = File.AppendText(ShoppingLogFile))
     {
-        writer.WriteLine($"{DateTime.Now} : selected '0' - Input Shopping to program ");
+        writer.WriteLine($"{DateTime.Now} :the Statistics from File was solves ");
     }
 }
 
@@ -77,6 +71,10 @@ void ProgramMenu1()
     {
         writer.WriteLine($"{DateTime.Now} : selected '1' - Statistics from memory ");
     }
+    Console.Clear();
+    Console.WriteLine("Calculating Shopping statistics from memory:");
+    Console.WriteLine("");
+    Console.WriteLine("First, please input Shopping (Shop, Date, Sum):");
 }
 
 void ProgramMenu2()
@@ -88,6 +86,10 @@ void ProgramMenu2()
     {
         writer.WriteLine($"{DateTime.Now} : selected '2' - Statistics from file ");
     }
+    Console.Clear();
+    Console.WriteLine("Calculating Shopping statistics from file:");
+    Console.WriteLine("");
+    Console.WriteLine("First, please input Shopping (Shop, Date, Sum):");
 }
 
 void ProgramMenu3()
@@ -108,7 +110,6 @@ do
     Console.Clear();
     //MENU
     Console.WriteLine("Program Menu for calculating Shopping statistics  :");
-    Console.WriteLine("0. Input shopping receipts");
     Console.WriteLine("1. Statistics from memory");
     Console.WriteLine("2. Statistics from file");
     Console.WriteLine("3. EXIT");
@@ -118,22 +119,41 @@ do
     {
         switch (choice)
         {
-            case 0:
-                ProgramMenu0();
-                Console.Clear();
-                InputFromKeyboard();
-                break;
             case 1:
                 ProgramMenu1();
-                Console.Clear();
-                var statisticsMemory = shoppingMemory.GetStatistics();
-                shoppingMemory.ShowResultStatistics(statisticsMemory.Min, statisticsMemory.Max);
+                InputFromKeyboard(1);
+
+                if (shoppingMemory.SumesLength() > 0)
+                {
+                    shoppingMemory.ShowShopping();
+                    var statisticsMemory = shoppingMemory.GetStatistics();
+                    statisticsMemory.WriteLineStatistics();
+                    shoppingMemory.ShowResultStatistics(statisticsMemory.Min, statisticsMemory.Max);
+                    DoneStatisticsMemory();
+                }
+                else
+                {
+                    Console.WriteLine("List of Shoppiing is Empty, please input Shopping, and try again");
+                    Console.ReadLine();
+                }
                 break;
             case 2:
                 ProgramMenu2();
-                Console.Clear();
-                var statisticsFile = shoppingFile.GetStatistics();
-                shoppingFile.ShowResultStatistics(statisticsFile.Min, statisticsFile.Max);
+                InputFromKeyboard(2);
+
+                if (shoppingFile.FileExist() == true)
+                {
+                    shoppingFile.ShowShopping();
+                    var statisticsFile = shoppingFile.GetStatistics();
+                    statisticsFile.WriteLineStatistics();
+                    shoppingFile.ShowResultStatistics(statisticsFile.Min, statisticsFile.Max);
+                    DoneStatisticsFile();
+                }
+                else
+                {
+                    Console.WriteLine("File of Shoppiing does not exist, please input Shopping, and try again");
+                    Console.ReadLine();
+                }
                 break;
             case 3:
                 ProgramMenu3();
@@ -142,7 +162,7 @@ do
                 Console.WriteLine("Selected '3' - GOOD BY");
                 break;
             default:
-                Console.WriteLine("Incorrect selection. Select a number from 0 to 3.");
+                Console.WriteLine("Incorrect selection. Select a number from 1 to 3");
                 break;
         }
     }
@@ -155,80 +175,46 @@ do
 
 } while (choice != 3);
 
-void InputFromKeyboard()
+void InputFromKeyboard(int i)
 //Wprowadzenie zakupow z klawiatury
 {
     while (true)
     {
-        Shopping shopping = InputShopping();
+        //Shopping shopping = InputShopping();
 
-        if (shopping == null)
+        //if (shopping == null)
+        Console.Write("   input Shop or 'q/Q'- to EXIT and show statistics:");
+        string shop = Console.ReadLine();
+        if (shop == "q" || shop == "Q")
         {
             break;
         }
         else
         {
-            SaveToFile(shopping);
-            shoppingMemory.AddShopping(shopping.Sum);
-            shoppingMemory.AddShopping(shopping);
-        }
-        var statisticsFromMemory = shoppingMemory.GetStatistics();
-    }
-}
-
-static Shopping InputShopping()
-//Wprowadzenie jednego zakupa
-{
-    Console.WriteLine("Input Shopping data (Shop, Date, Sum) :");
-    Console.Write("Shop name :  ('q/Q'- to EXIT)");
-    string shop = Console.ReadLine();
-    if (shop.ToUpper() == "Q")
-        return null;
-    DateTime date;
-    do
-    {
-        Console.Write("Date Shopping (dd.MM.yyyy): ");
-        string stringData = Console.ReadLine();
-
-        if (DateTime.TryParseExact(stringData, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out date))
-        {
-            if (int.Parse(date.Year.ToString()) == 2023)
+            Console.Write("   input Date (dd.MM.yyyy): ");
+            string dateString = Console.ReadLine();
+            Console.Write("   input Sum: ");
+            string sumString = Console.ReadLine();
+            if (i == 1)
             {
-                break;
+                shoppingMemory.AddShopping(shop, dateString, sumString);
             }
             else
+                if (i == 2)
             {
-                Console.WriteLine("Incorrect Year. Try again.");
+                shoppingFile.AddShopping(shop, dateString, sumString);
             }
-        }
-        else
-        {
-            Console.WriteLine("Incorrect date format. Try again.");
+
         }
 
-    } while (true);
-
-    Console.Write("shopping Sum: ");
-    float sum;
-
-    while (!float.TryParse(Console.ReadLine(), out sum) || sum <= 0)
-    {
-        Console.WriteLine("Incorrect Sum of Shopping. Try again.");
-    }
-
-    return new Shopping(shop, date, sum);
-}
-
-static void SaveToFile(Shopping item)
-//Dodanie zakupów do txt pliku
-{
-
-    using (var writer = File.AppendText(ShoppingFileName))
-    {
-
-        writer.WriteLine($"{item.Shop};{item.Date.ToShortDateString()};{item.Sum:N2}");
     }
 }
+
+
+
+
+
+
 
 
 

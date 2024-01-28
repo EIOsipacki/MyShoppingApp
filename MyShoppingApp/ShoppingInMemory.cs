@@ -1,18 +1,17 @@
 ﻿namespace MyShoppingApp
 {
-    internal class ShoppingInMemory : ShoppingBase
+    public class ShoppingInMemory : ShoppingBase
     {
         private List<Shopping> listShopping = new List<Shopping>();
         private List<float> sumes = new List<float>();
         public ShoppingInMemory(int year)
             : base(year)
         {
-
         }
 
         public override event ShoppingAddedDelegate ShoppingAddedEvent;
 
-        public override void AddShopping(float sum)
+        public void AddShopping(float sum)
         {
 
             if (sum > 0)
@@ -23,15 +22,85 @@
             {
                 throw new Exception("Invalid grade value");
             }
-
-
         }
 
-        public void AddShopping(Shopping shopping)
+        public override void AddShopping(string shop, string dateString, float sum)
+        {
+            string sumString = "";
+            sumString += sum;
+            this.AddShopping(shop, dateString, sumString);
+        }
+
+        public override void AddShopping(string shop, string dateString, string sumString)
+        {
+            bool shopBool = false;
+            bool dateBool = false;
+            bool sumBool = false;
+            bool exitBool = false;
+
+            if (shop.Length > 0)
+            {
+                shopBool = true;
+            }
+            else
+            {
+                shopBool = false;
+            }
+
+            if (shop.ToUpper() == "Q")
+            {
+                exitBool = false;
+            }
+            else
+            {
+                exitBool = true;
+            }
+
+            DateTime date;
+            if (DateTime.TryParseExact(dateString, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out date) ==true)
+            {
+                if (int.Parse(date.Year.ToString()) == 2023)
+                {
+                    dateBool = true;
+                }
+                else
+                {
+                    dateBool = false;
+                }
+            }
+            else
+            {
+                dateBool = false;
+            }
+
+            float sum;
+            if (!float.TryParse(sumString, out sum) || sum <= 0)
+            {
+                sumBool = false;
+            }
+            else
+            {
+                sumBool = true;
+            }
+            
+            //sprawdzanie danych 
+            if ((shopBool == true) && (dateBool == true) && (sumBool == true) && (exitBool == true))
+            {
+                Shopping shopping = new Shopping(shop, date, sum);
+                this.AddShopping(shopping);
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Shopping data. Try again.");
+            }
+        }
+
+        public override void AddShopping(Shopping shopping)
         {
             if (shopping.Sum > 0)
             {
                 this.listShopping.Add(shopping);
+                this.AddShopping(shopping.Sum);
 
                 if (ShoppingAddedEvent != null)
                 {
@@ -40,7 +109,7 @@
             }
             else
             {
-                throw new Exception("Invalid grade value");
+                Console.WriteLine("Invalid Shopping data");
             }
         }
 
@@ -52,48 +121,51 @@
                 statistics.AddShopping(sum);
             }
             return statistics;
+        }
+
+        public override void ShowShopping()
+        {
+            Console.WriteLine("");
+            Console.WriteLine(" --------------- LIST OF SHOPPING FROM MEMORY ---------------");
+            foreach (var item in listShopping)
+            {
+
+                Console.WriteLine($"{item.Shop} ; {item.Date.ToShortDateString()} ; {item.Sum:N2}");
+            }
+
+            Console.WriteLine("");
 
         }
 
         public override void ShowResultStatistics(float min, float max)
         {
-            if (listShopping.Count == 0)
+            //pokazanie Min i Max zakupow 
+            Console.WriteLine("--------------- MIN shoppings ---------------");
+            foreach (var item in listShopping)
             {
-                Console.WriteLine(" List of Shoppiing is Empty, please input Shopping by Menu ->'0' ");
-                Console.ReadLine();
-            }
-            else
-            {
-                Console.WriteLine(" --------------- LIST OF SHOPPING FROM MEMORY ---------------");
-                foreach (var item in listShopping)
+                if (item.Sum == min)
                 {
-
                     Console.WriteLine($"{item.Shop} ; {item.Date.ToShortDateString()} ; {item.Sum:N2}");
                 }
-
-                Console.WriteLine("");
-
-                ////pokazanie Min i Max zakupow 
-                Console.WriteLine("--------------- MIN shoppings ---------------");
-                foreach (var item in listShopping)
-                {
-                    if (item.Sum == min)
-                    {
-                        Console.WriteLine($"{item.Shop} ; {item.Date.ToShortDateString()} ; {item.Sum:N2}");
-                    }
-                }
-                Console.WriteLine(" --------------- MAX shoppings ---------------");
-                foreach (var item in listShopping)
-                {
-                    if (item.Sum == max)
-                    {
-                        Console.WriteLine($"{item.Shop} : {item.Date.ToShortDateString()} ; {item.Sum:N2}");
-                    }
-                }
-                Console.WriteLine("");
-                Console.WriteLine("Press Any key to continue");
-                Console.ReadLine();
             }
+            Console.WriteLine(" --------------- MAX shoppings ---------------");
+            foreach (var item in listShopping)
+            {
+                if (item.Sum == max)
+                {
+                    Console.WriteLine($"{item.Shop} : {item.Date.ToShortDateString()} ; {item.Sum:N2}");
+                }
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Press Any key to continue");
+            Console.ReadLine();
         }
+
+        //sprawdzenie ze mamy dane Zakupów
+        public int SumesLength()
+        {
+            return sumes.Count;
+        }
+
     }
 }

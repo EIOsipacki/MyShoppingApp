@@ -33,14 +33,12 @@
         }
         public void WriteLineStatistics()
         {
-            Console.WriteLine("--------------- Ztatystyka zakupow według wprowadzonych paragonow ---------------");
-            Console.WriteLine($"Average zakupów: {Average:N2}");
-            Console.WriteLine($"Min zakup : {Min:N2}");
-            Console.WriteLine($"Max zakup : {Max:N2}");
+            Console.WriteLine("--------------- Statistics of Shopping ---------------");
+            Console.WriteLine($"SUM: {Sum:N2}");
+            Console.WriteLine($"Average: {Average:N2}");
+            Console.WriteLine($"Min: {Min:N2}");
+            Console.WriteLine($"Max: {Max:N2}");
             Console.WriteLine();
         }
-
-
-
     }
 }

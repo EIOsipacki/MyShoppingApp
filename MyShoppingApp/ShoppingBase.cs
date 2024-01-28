@@ -12,9 +12,15 @@
         {
             this.Year = year;
         }
-        public abstract void AddShopping(float sum);
+        public abstract void AddShopping(Shopping item);
+
+        public abstract void AddShopping(string shop, string dateString, float sum);
+
+        public abstract void AddShopping(string shop, string dateString, string sumString); 
 
         public abstract Statistics GetStatistics();
+
+        public abstract void ShowShopping();
 
         public abstract void ShowResultStatistics(float min, float max);
 
