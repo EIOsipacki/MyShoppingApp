@@ -1,15 +1,14 @@
 ﻿using MyShoppingApp;
 using System;
 
-//program wyliczania statystyk zakupow w Podanym Roku (tu tylko jeden rok = 2023)
+//program wyliczania statystyk zakupow w Podanym Roku (tu tylko jeden rok = 2023, w testach 2024 i 2025)
 // Po uruchomienu programu mamy Menu z możliwosciu wyboru:
-//0 - wprowadzenia nowych zakupów (zachowują sie w list w pamięci i automatycznie
-//    zapisują sie do pliku 'ROK.txt'
-//1 - wyliczanie i pokazanie Statystyk z pamieci; plus pokazanie listy Min i Max zakupów
-//2 - wyliczanie statystyk z zapisanego pliku '2023.txt', plus pokazanie listy Min i Max zakupow z pliku
+//1 - wprowadzenia nowych zakupów (zachowują sie w list w pamięci), wyliczanie i pokazanie z pamieci: listy zakupów; statystyk zakupów; plus pokazanie listy Min i Max zakupów
+//2 - wprowadzenia nowych zakupów (zachowują sie w pliku "ROK.txt"), wyliczanie i pokazanie z zapisanego pliku: listy zakupów; statystyk zakupów; plus pokazanie listy Min i Max zakupów
 //3 - Wyjscie z programu
+
 //  Do pliku 'log.txt' zapisuje sie informacjia o wydarzeniach po uruchomieniu Programu 
-//  przez Eventy przy dodaniu paragonow; przez zapisanie w plik resultata wyboru Menu, Uruchomienia, Zamknięcia programu 
+//  przez Eventy przy dodaniu paragonow; przez zapisanie w plik resultata wyboru Menu, Uruchomienia, Pokazanie Statystyk, Zamknięcia programu 
 
 int choice;
 const string ShoppingLogFile = "log.txt";
