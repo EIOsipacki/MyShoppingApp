@@ -7,13 +7,12 @@
         public ShoppingInFile(int year)
             : base(year)
         {
-            fileName = "" + year + ".txt";
+            fileName = year + ".txt";
         }
 
-        // string fileName = new string("" + year);
         public override event ShoppingAddedDelegate ShoppingAddedEvent;
 
-        public override void AddShopping(Shopping item)
+        public override void AddShopping(ShoppingItem item)
         {
             if (item.Sum > 0)
             {
@@ -92,10 +91,10 @@
             {
                 sumBool = true;
             }
-            //sprawdzanie danych 
+
             if ((shopBool == true) && (dateBool == true) && (sumBool == true) && (exitBool == true))
             {
-                Shopping shopping = new Shopping(shop, date, sum);
+                ShoppingItem shopping = new ShoppingItem(shop, date, sum);
                 this.AddShopping(shopping);
             }
             else
@@ -122,7 +121,6 @@
                         {
                             float rezult = float.Parse(elements[2].Trim());
                             statistics.AddShopping(rezult);
-                            //AddShopping(rezult);
                         }
                         else
                         {
@@ -162,8 +160,6 @@
         public override void ShowResultStatistics(float min, float max)
         {
             string line;
-
-            //pokazanie Min i Max paragonow z pliku 
             Console.WriteLine("--------------- MIN shoppings ---------------");
             if (File.Exists(fileName))
             {
@@ -193,8 +189,6 @@
                     }
                 }
             }
-
-
             Console.WriteLine(" --------------- MAX shoppings ---------------");
             if (File.Exists(fileName))
             {
@@ -202,7 +196,6 @@
                 {
                     int kollines = 1;
                     line = reader.ReadLine();
-
                     while (line != null)
                     {
                         string[] elements = line.Split(';');
@@ -214,7 +207,6 @@
                             {
                                 Console.WriteLine(line);
                             }
-
                         }
                         else
                         {
@@ -224,7 +216,6 @@
                     }
                 }
             }
-
             Console.WriteLine("");
             Console.WriteLine("Press Any key to continue");
             Console.ReadLine();

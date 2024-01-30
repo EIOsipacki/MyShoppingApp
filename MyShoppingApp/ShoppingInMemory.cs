@@ -2,8 +2,9 @@
 {
     public class ShoppingInMemory : ShoppingBase
     {
-        private List<Shopping> listShopping = new List<Shopping>();
+        private List<ShoppingItem> listShopping = new List<ShoppingItem>();
         private List<float> sumes = new List<float>();
+        
         public ShoppingInMemory(int year)
             : base(year)
         {
@@ -13,7 +14,6 @@
 
         public void AddShopping(float sum)
         {
-
             if (sum > 0)
             {
                 this.sumes.Add(sum);
@@ -57,7 +57,7 @@
             }
 
             DateTime date;
-            if (DateTime.TryParseExact(dateString, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out date) ==true)
+            if (DateTime.TryParseExact(dateString, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out date) == true)
             {
                 if (int.Parse(date.Year.ToString()) == 2023)
                 {
@@ -82,11 +82,10 @@
             {
                 sumBool = true;
             }
-            
-            //sprawdzanie danych 
+                        
             if ((shopBool == true) && (dateBool == true) && (sumBool == true) && (exitBool == true))
             {
-                Shopping shopping = new Shopping(shop, date, sum);
+                ShoppingItem shopping = new ShoppingItem(shop, date, sum);
                 this.AddShopping(shopping);
             }
             else
@@ -95,7 +94,7 @@
             }
         }
 
-        public override void AddShopping(Shopping shopping)
+        public override void AddShopping(ShoppingItem shopping)
         {
             if (shopping.Sum > 0)
             {
@@ -132,14 +131,11 @@
 
                 Console.WriteLine($"{item.Shop} ; {item.Date.ToShortDateString()} ; {item.Sum:N2}");
             }
-
             Console.WriteLine("");
-
         }
 
         public override void ShowResultStatistics(float min, float max)
         {
-            //pokazanie Min i Max zakupow 
             Console.WriteLine("--------------- MIN shoppings ---------------");
             foreach (var item in listShopping)
             {
@@ -161,7 +157,6 @@
             Console.ReadLine();
         }
 
-        //sprawdzenie ze mamy dane Zakupów
         public int SumesLength()
         {
             return sumes.Count;

@@ -1,17 +1,8 @@
 ﻿using MyShoppingApp;
 using System;
 
-//program wyliczania statystyk zakupow w Podanym Roku (tu tylko jeden rok = 2023, w testach 2024 i 2025)
-// Po uruchomienu programu mamy Menu z możliwosciu wyboru:
-//1 - wprowadzenia nowych zakupów (zachowują sie w list w pamięci), wyliczanie i pokazanie z pamieci: listy zakupów; statystyk zakupów; plus pokazanie listy Min i Max zakupów
-//2 - wprowadzenia nowych zakupów (zachowują sie w pliku "ROK.txt"), wyliczanie i pokazanie z zapisanego pliku: listy zakupów; statystyk zakupów; plus pokazanie listy Min i Max zakupów
-//3 - Wyjscie z programu
-
-//  Do pliku 'log.txt' zapisuje sie informacjia o wydarzeniach po uruchomieniu Programu 
-//  przez Eventy przy dodaniu paragonow; przez zapisanie w plik resultata wyboru Menu, Uruchomienia, Pokazanie Statystyk, Zamknięcia programu 
-
 int choice;
-const string ShoppingLogFile = "log.txt";
+const string shoppingLogFile = "log.txt";
 
 ShoppingInMemory shoppingMemory = new ShoppingInMemory(2023);
 ShoppingInFile shoppingFile = new ShoppingInFile(2023);
@@ -22,92 +13,42 @@ shoppingFile.ShoppingAddedEvent += ShoppingAddedToFile;
 
 void ShoppingSumMemoryAdded(object sender, EventArgs args)
 {
-    using (var writer = File.AppendText(ShoppingLogFile))
+    using (var writer = File.AppendText(shoppingLogFile))
     {
-        writer.WriteLine($"{DateTime.Now} : added new shopping");
+        writer.WriteLine($"{DateTime.Now}: added new shopping");
     }
 }
-void ProgramBegin()
-//+ info do pliku log.xtx
+
+void WriteMessageToLogFile(string message)
 {
-    using (var writer = File.AppendText(ShoppingLogFile))
+    using (var writer = File.AppendText(shoppingLogFile))
     {
-        writer.WriteLine($"{DateTime.Now} :User '{Environment.UserName}' started program on computer '{Environment.MachineName}',  on system -  '{Environment.OSVersion} '");
+        writer.WriteLine($"{DateTime.Now}: " + message);
     }
 }
 
 void ShoppingAddedToFile(object sender, EventArgs args)
 {
-    using (var writer = File.AppendText(ShoppingLogFile))
+    using (var writer = File.AppendText(shoppingLogFile))
     {
-        writer.WriteLine($"{DateTime.Now} : the new shopping saved to file ");
+        writer.WriteLine($"{DateTime.Now}: the new shopping saved to file ");
     }
 }
 
-void DoneStatisticsMemory()
-{
-    using (var writer = File.AppendText(ShoppingLogFile))
-    {
-        writer.WriteLine($"{DateTime.Now} :the Statistics from Memory was solved ");
-    }
-}
 
-void DoneStatisticsFile()
-//+ info do pliku log.xtx
+void WriteInConsoleChoiceText(string text)
 {
-    using (var writer = File.AppendText(ShoppingLogFile))
-    {
-        writer.WriteLine($"{DateTime.Now} :the Statistics from File was solves ");
-    }
-}
-
-void ProgramMenu1()
-//+ info do pliku log.xtx
-//Menu - 1 - Wyliczanie statystyk z pamięci 
-//Pokazanie Min i Max zakupow
-{
-    using (var writer = File.AppendText(ShoppingLogFile))
-    {
-        writer.WriteLine($"{DateTime.Now} : selected '1' - Statistics from memory ");
-    }
     Console.Clear();
-    Console.WriteLine("Calculating Shopping statistics from memory:");
+    Console.WriteLine($"Calculating Shopping statistics from {text}:");
     Console.WriteLine("");
     Console.WriteLine("First, please input Shopping (Shop, Date, Sum):");
 }
 
-void ProgramMenu2()
-//+ info do pliku log.xtx
-//Menu - 2 - Wyliczanie statystyk z pliku 
-//Pokazanie Min i Max zakupow po odczytu z pliku
-{
-    using (var writer = File.AppendText(ShoppingLogFile))
-    {
-        writer.WriteLine($"{DateTime.Now} : selected '2' - Statistics from file ");
-    }
-    Console.Clear();
-    Console.WriteLine("Calculating Shopping statistics from file:");
-    Console.WriteLine("");
-    Console.WriteLine("First, please input Shopping (Shop, Date, Sum):");
-}
-
-void ProgramMenu3()
-//+ info do pliku log.xtx
-//EXIT from program
-{
-    using (var writer = File.AppendText(ShoppingLogFile))
-    {
-        writer.WriteLine($"{DateTime.Now} : Close application  ");
-    }
-}
-
-//ZACZYNA SIE WYKONANIE
-ProgramBegin();
+WriteMessageToLogFile($" User '{Environment.UserName}' started program on computer '{Environment.MachineName}', on system - '{Environment.OSVersion} '");
 
 do
 {
     Console.Clear();
-    //MENU
     Console.WriteLine("Program Menu for calculating Shopping statistics  :");
     Console.WriteLine("1. Statistics from memory");
     Console.WriteLine("2. Statistics from file");
@@ -119,8 +60,9 @@ do
         switch (choice)
         {
             case 1:
-                ProgramMenu1();
-                InputFromKeyboard(1);
+                WriteMessageToLogFile("selected '1' - Statistics from memory ");
+                WriteInConsoleChoiceText("memory");
+                InputFromKeyboard(shoppingMemory);
 
                 if (shoppingMemory.SumesLength() > 0)
                 {
@@ -128,7 +70,7 @@ do
                     var statisticsMemory = shoppingMemory.GetStatistics();
                     statisticsMemory.WriteLineStatistics();
                     shoppingMemory.ShowResultStatistics(statisticsMemory.Min, statisticsMemory.Max);
-                    DoneStatisticsMemory();
+                    WriteMessageToLogFile("the Statistics from Memory was solved");
                 }
                 else
                 {
@@ -137,8 +79,9 @@ do
                 }
                 break;
             case 2:
-                ProgramMenu2();
-                InputFromKeyboard(2);
+                WriteMessageToLogFile("selected '2' - Statistics from file");
+                WriteInConsoleChoiceText("file");
+                InputFromKeyboard(shoppingFile);
 
                 if (shoppingFile.FileExist() == true)
                 {
@@ -146,7 +89,7 @@ do
                     var statisticsFile = shoppingFile.GetStatistics();
                     statisticsFile.WriteLineStatistics();
                     shoppingFile.ShowResultStatistics(statisticsFile.Min, statisticsFile.Max);
-                    DoneStatisticsFile();
+                    WriteMessageToLogFile("the Statistics from File was solves");
                 }
                 else
                 {
@@ -155,7 +98,7 @@ do
                 }
                 break;
             case 3:
-                ProgramMenu3();
+                WriteMessageToLogFile("Close application  ");
                 Console.Clear();
                 Console.WriteLine("");
                 Console.WriteLine("Selected '3' - GOOD BY");
@@ -169,19 +112,14 @@ do
     {
         Console.WriteLine("Incorrect selection. Select a number from 0 to 3.");
     }
-
     Console.WriteLine();
 
 } while (choice != 3);
 
-void InputFromKeyboard(int i)
-//Wprowadzenie zakupow z klawiatury
+void InputFromKeyboard(IShopping item)
 {
     while (true)
     {
-        //Shopping shopping = InputShopping();
-
-        //if (shopping == null)
         Console.Write("   input Shop or 'q/Q'- to EXIT and show statistics:");
         string shop = Console.ReadLine();
         if (shop == "q" || shop == "Q")
@@ -194,18 +132,8 @@ void InputFromKeyboard(int i)
             string dateString = Console.ReadLine();
             Console.Write("   input Sum: ");
             string sumString = Console.ReadLine();
-            if (i == 1)
-            {
-                shoppingMemory.AddShopping(shop, dateString, sumString);
-            }
-            else
-                if (i == 2)
-            {
-                shoppingFile.AddShopping(shop, dateString, sumString);
-            }
-
+            item.AddShopping(shop, dateString, sumString);
         }
-
     }
 }
 

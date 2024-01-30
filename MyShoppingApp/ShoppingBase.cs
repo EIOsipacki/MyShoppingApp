@@ -12,7 +12,7 @@
         {
             this.Year = year;
         }
-        public abstract void AddShopping(Shopping item);
+        public abstract void AddShopping(ShoppingItem item);
 
         public abstract void AddShopping(string shop, string dateString, float sum);
 

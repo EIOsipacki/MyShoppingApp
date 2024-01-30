@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingApp
 {
-    public class Shopping
+    public class ShoppingItem
     {
-        public Shopping(string shop, DateTime date, float sum)
+        public ShoppingItem(string shop, DateTime date, float sum)
         {
             this.Shop = shop;
             this.Date = date;

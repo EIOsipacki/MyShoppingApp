@@ -6,7 +6,7 @@ namespace MyShoppingApp
     {
 
         int Year { get; set; }
-        void AddShopping(Shopping item);
+        void AddShopping(ShoppingItem item);
 
         void AddShopping(string shop, string dateString, float sum);
 
