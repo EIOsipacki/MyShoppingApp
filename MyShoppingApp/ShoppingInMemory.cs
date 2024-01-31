@@ -157,9 +157,9 @@
             Console.ReadLine();
         }
 
-        public int SumesLength()
+        public bool ListOfShoppingNotNull()
         {
-            return sumes.Count;
+            return (sumes.Count > 0);
         }
 
     }

@@ -221,7 +221,7 @@
             Console.ReadLine();
         }
 
-        public bool FileExist()
+        public bool ListOfShoppingNotNull()
         {
             return File.Exists(fileName);
         }

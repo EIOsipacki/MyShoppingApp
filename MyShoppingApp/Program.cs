@@ -60,42 +60,10 @@ do
         switch (choice)
         {
             case 1:
-                WriteMessageToLogFile("selected '1' - Statistics from memory ");
-                WriteInConsoleChoiceText("memory");
-                InputFromKeyboard(shoppingMemory);
-
-                if (shoppingMemory.SumesLength() > 0)
-                {
-                    shoppingMemory.ShowShopping();
-                    var statisticsMemory = shoppingMemory.GetStatistics();
-                    statisticsMemory.WriteLineStatistics();
-                    shoppingMemory.ShowResultStatistics(statisticsMemory.Min, statisticsMemory.Max);
-                    WriteMessageToLogFile("the Statistics from Memory was solved");
-                }
-                else
-                {
-                    Console.WriteLine("List of Shoppiing is Empty, please input Shopping, and try again");
-                    Console.ReadLine();
-                }
+                ItemOfMenu(1, shoppingMemory);
                 break;
             case 2:
-                WriteMessageToLogFile("selected '2' - Statistics from file");
-                WriteInConsoleChoiceText("file");
-                InputFromKeyboard(shoppingFile);
-
-                if (shoppingFile.FileExist() == true)
-                {
-                    shoppingFile.ShowShopping();
-                    var statisticsFile = shoppingFile.GetStatistics();
-                    statisticsFile.WriteLineStatistics();
-                    shoppingFile.ShowResultStatistics(statisticsFile.Min, statisticsFile.Max);
-                    WriteMessageToLogFile("the Statistics from File was solves");
-                }
-                else
-                {
-                    Console.WriteLine("File of Shoppiing does not exist, please input Shopping, and try again");
-                    Console.ReadLine();
-                }
+                ItemOfMenu(2, shoppingFile);
                 break;
             case 3:
                 WriteMessageToLogFile("Close application  ");
@@ -134,6 +102,37 @@ void InputFromKeyboard(IShopping item)
             string sumString = Console.ReadLine();
             item.AddShopping(shop, dateString, sumString);
         }
+    }
+}
+
+void ItemOfMenu(int choice, IShopping item)
+{
+    string stringChoice = "";
+    if (choice == 1)
+    {
+        stringChoice = "memory";
+    }
+    else
+    {
+        stringChoice = "file";
+    }
+
+    WriteMessageToLogFile($"selected '{choice}' - Statistics from {stringChoice}");
+    WriteInConsoleChoiceText(stringChoice);
+    InputFromKeyboard(item);
+
+    if (shoppingFile.ListOfShoppingNotNull() == true)
+    {
+        item.ShowShopping();
+        var statisticsRezult = item.GetStatistics();
+        statisticsRezult.WriteLineStatistics();
+        item.ShowResultStatistics(statisticsRezult.Min, statisticsRezult.Max);
+        WriteMessageToLogFile($"the Statistics from {stringChoice} was solves");
+    }
+    else
+    {
+        Console.WriteLine($"List of Shoppiing from {stringChoice} Empty, please input Shopping, and try again");
+        Console.ReadLine();
     }
 }
 
